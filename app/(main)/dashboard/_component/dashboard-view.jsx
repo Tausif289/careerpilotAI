@@ -15,9 +15,9 @@ import {
   LineChart,
   TrendingUp,
   TrendingDown,
-  Brain,
 } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
+import { motion } from "framer-motion";
 import {
   Card,
   CardContent,
@@ -29,198 +29,172 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
 const DashboardView = ({ insights }) => {
-  // Transform salary data for the chart
   const salaryData = insights.salaryRanges.map((range) => ({
     name: range.role,
     min: range.min / 1000,
-    max: range.max / 1000,
     median: range.median / 1000,
+    max: range.max / 1000,
   }));
-
-  const getDemandLevelColor = (level) => {
-    switch (level.toLowerCase()) {
-      case "high":
-        return "bg-green-500";
-      case "medium":
-        return "bg-yellow-500";
-      case "low":
-        return "bg-red-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
 
   const getMarketOutlookInfo = (outlook) => {
     switch (outlook.toLowerCase()) {
       case "positive":
-        return { icon: TrendingUp, color: "text-green-500" };
+        return { icon: TrendingUp, color: "text-emerald-400" };
       case "neutral":
-        return { icon: LineChart, color: "text-yellow-500" };
+        return { icon: LineChart, color: "text-amber-400" };
       case "negative":
-        return { icon: TrendingDown, color: "text-red-500" };
+        return { icon: TrendingDown, color: "text-rose-400" };
       default:
-        return { icon: LineChart, color: "text-gray-500" };
+        return { icon: LineChart, color: "text-gray-400" };
     }
   };
 
   const OutlookIcon = getMarketOutlookInfo(insights.marketOutlook).icon;
   const outlookColor = getMarketOutlookInfo(insights.marketOutlook).color;
 
-  // Format dates using date-fns
-  const lastUpdatedDate = format(new Date(insights.lastUpdated), "dd/MM/yyyy");
+  const lastUpdatedDate = format(new Date(insights.lastUpdated), "dd MMM yyyy");
   const nextUpdateDistance = formatDistanceToNow(
     new Date(insights.nextUpdate),
     { addSuffix: true }
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <Badge variant="outline">Last updated: {lastUpdatedDate}</Badge>
-      </div>
+    <div className="relative min-h-screen  text-white overflow-hidden p-8">
 
-      {/* Market Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Market Outlook
-            </CardTitle>
-            <OutlookIcon className={`h-4 w-4 ${outlookColor}`} />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{insights.marketOutlook}</div>
-            <p className="text-xs text-muted-foreground">
-              Next update {nextUpdateDistance}
-            </p>
-          </CardContent>
-        </Card>
+      {/* Animated AI Background */}
+      
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">
-              Industry Growth
-            </CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {insights.growthRate.toFixed(1)}%
-            </div>
-            <Progress value={insights.growthRate} className="mt-2" />
-          </CardContent>
-        </Card>
+      {/* Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex justify-between items-center mb-10"
+      >
+        <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-white via-indigo-400 to-purple-400 bg-clip-text text-transparent">
+          AI Industry Intelligence
+        </h1>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Demand Level</CardTitle>
-            <BriefcaseIcon className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{insights.demandLevel}</div>
-            <div
-              className={`h-2 w-full rounded-full mt-2 ${getDemandLevelColor(
-                insights.demandLevel
-              )}`}
-            />
-          </CardContent>
-        </Card>
+        <Badge className="border-indigo-500/40 text-indigo-300 bg-indigo-500/10 backdrop-blur-md">
+          Updated {lastUpdatedDate}
+        </Badge>
+      </motion.div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Top Skills</CardTitle>
-            <Brain className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-1">
+      {/* Overview Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        {/* Market Outlook */}
+        <motion.div whileHover={{ scale: 1.04 }}>
+          <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-xl shadow-indigo-900/30">
+            <CardHeader className="flex flex-row justify-between items-center pb-2">
+              <CardTitle className="text-gray-400 text-sm">
+                Market Outlook
+              </CardTitle>
+              <OutlookIcon className={`h-5 w-5 ${outlookColor}`} />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">
+                {insights.marketOutlook}
+              </div>
+              <p className="text-xs text-gray-400 mt-1">
+                Next update {nextUpdateDistance}
+              </p>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Growth */}
+        <motion.div whileHover={{ scale: 1.04 }}>
+          <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-xl shadow-emerald-900/30">
+            <CardHeader className="flex justify-between pb-2">
+              <CardTitle className="text-gray-400 text-sm">
+                Industry Growth
+              </CardTitle>
+              <TrendingUp className="h-5 w-5 text-emerald-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">
+                {insights.growthRate.toFixed(1)}%
+              </div>
+              <Progress
+                value={insights.growthRate}
+                className="mt-4 bg-gray-800/60"
+              />
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Demand */}
+        <motion.div whileHover={{ scale: 1.04 }}>
+          <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-xl shadow-blue-900/30">
+            <CardHeader className="flex justify-between pb-2">
+              <CardTitle className="text-gray-400 text-sm">
+                Demand Level
+              </CardTitle>
+              <BriefcaseIcon className="h-5 w-5 text-indigo-400" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold">
+                {insights.demandLevel}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+
+        {/* Top Skills */}
+        <motion.div whileHover={{ scale: 1.04 }}>
+          <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-xl shadow-purple-900/30">
+            <CardHeader>
+              <CardTitle className="text-gray-400 text-sm">
+                Top Skills
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
               {insights.topSkills.map((skill) => (
-                <Badge key={skill} variant="secondary">
+                <Badge
+                  key={skill}
+                  className="bg-indigo-600/20 text-indigo-300 border-indigo-500/30 hover:bg-indigo-600/40 transition"
+                >
                   {skill}
                 </Badge>
               ))}
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </motion.div>
       </div>
 
-      {/* Salary Ranges Chart */}
-      <Card className="col-span-4">
-        <CardHeader>
-          <CardTitle>Salary Ranges by Role</CardTitle>
-          <CardDescription>
-            Displaying minimum, median, and maximum salaries (in thousands)
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="h-[400px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={salaryData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip
-                  content={({ active, payload, label }) => {
-                    if (active && payload && payload.length) {
-                      return (
-                        <div className="bg-background border rounded-lg p-2 shadow-md">
-                          <p className="font-medium">{label}</p>
-                          {payload.map((item) => (
-                            <p key={item.name} className="text-sm">
-                              {item.name}: ${item.value}K
-                            </p>
-                          ))}
-                        </div>
-                      );
-                    }
-                    return null;
-                  }}
-                />
-                <Bar dataKey="min" fill="#94a3b8" name="Min Salary (K)" />
-                <Bar dataKey="median" fill="#64748b" name="Median Salary (K)" />
-                <Bar dataKey="max" fill="#475569" name="Max Salary (K)" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Industry Trends */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
+      {/* Salary Chart */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="mt-10"
+      >
+        <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl shadow-indigo-900/40">
           <CardHeader>
-            <CardTitle>Key Industry Trends</CardTitle>
-            <CardDescription>
-              Current trends shaping the industry
+            <CardTitle className="text-xl font-semibold">
+              Salary Intelligence
+            </CardTitle>
+            <CardDescription className="text-gray-400">
+              AI-generated salary benchmarks (USD thousands)
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <ul className="space-y-4">
-              {insights.keyTrends.map((trend, index) => (
-                <li key={index} className="flex items-start space-x-2">
-                  <div className="h-2 w-2 mt-2 rounded-full bg-primary" />
-                  <span>{trend}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Recommended Skills</CardTitle>
-            <CardDescription>Skills to consider developing</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {insights.recommendedSkills.map((skill) => (
-                <Badge key={skill} variant="outline">
-                  {skill}
-                </Badge>
-              ))}
+            <div className="h-[420px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={salaryData}>
+                  <CartesianGrid stroke="#1e293b" strokeDasharray="3 3" />
+                  <XAxis stroke="#94a3b8" dataKey="name" />
+                  <YAxis stroke="#94a3b8" />
+                  <Tooltip />
+                  <Bar dataKey="min" fill="#475569" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="median" fill="#6366f1" radius={[6, 6, 0, 0]} />
+                  <Bar dataKey="max" fill="#a855f7" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
-      </div>
+      </motion.div>
     </div>
   );
 };

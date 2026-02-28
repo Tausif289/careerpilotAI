@@ -13,6 +13,9 @@ export default async function OnboardingPage() {
 
   return (
     <main>
+       <div className="absolute inset-0  from-slate-950 via-indigo-950 to-slate-950"></div> 
+
+    
       <OnboardingForm industries={industries} />
     </main>
   );

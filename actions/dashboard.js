@@ -2,38 +2,55 @@
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const genAI = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 export const generateAIInsights = async (industry) => {
   const prompt = `
-          Analyze the current state of the ${industry} industry and provide insights in ONLY the following JSON format without any additional notes or explanations:
-          {
-            "salaryRanges": [
-              { "role": "string", "min": number, "max": number, "median": number, "location": "string" }
-            ],
-            "growthRate": number,
-            "demandLevel": "High" | "Medium" | "Low",
-            "topSkills": ["skill1", "skill2"],
-            "marketOutlook": "Positive" | "Neutral" | "Negative",
-            "keyTrends": ["trend1", "trend2"],
-            "recommendedSkills": ["skill1", "skill2"]
-          }
-          
-          IMPORTANT: Return ONLY the JSON. No additional text, notes, or markdown formatting.
-          Include at least 5 common roles for salary ranges.
-          Growth rate should be a percentage.
-          Include at least 5 skills and trends.
-        `;
+Analyze the current state of the ${industry} industry and provide insights in ONLY the following JSON format:
 
-  const result = await model.generateContent(prompt);
-  const response = result.response;
-  const text = response.text();
-  const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
+{
+  "salaryRanges": [
+    { "role": "string", "min": number, "max": number, "median": number, "location": "string" }
+  ],
+  "growthRate": number,
+  "demandLevel": "High" | "Medium" | "Low",
+  "topSkills": ["skill1", "skill2"],
+  "marketOutlook": "Positive" | "Neutral" | "Negative",
+  "keyTrends": ["trend1", "trend2"],
+  "recommendedSkills": ["skill1", "skill2"]
+}
 
-  return JSON.parse(cleanedText);
+IMPORTANT:
+- Return ONLY valid JSON.
+- No markdown.
+- No explanations.
+- Include at least 5 roles.
+- Include at least 5 skills and trends.
+- Growth rate must be a percentage number.
+`;
+
+  try {
+    const result = await genAI.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
+
+    const text = result.text;
+
+    const cleanedText = text
+      .replace(/```json/gi, "")
+      .replace(/```/g, "")
+      .trim();
+
+    return JSON.parse(cleanedText);
+  } catch (error) {
+    console.error("AI Insight generation failed:", error);
+    throw new Error("Failed to generate industry insights");
+  }
 };
 
 export async function getIndustryInsights() {
@@ -49,7 +66,11 @@ export async function getIndustryInsights() {
 
   if (!user) throw new Error("User not found");
 
-  // If no insights exist, generate them
+  if (!user.industry) {
+    throw new Error("User industry not set");
+  }
+
+  // If no insights exist → generate
   if (!user.industryInsight) {
     const insights = await generateAIInsights(user.industry);
 

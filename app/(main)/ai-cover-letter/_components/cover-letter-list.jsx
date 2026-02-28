@@ -2,16 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { Edit2, Eye, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+  Eye,
+  Trash2,
+  Sparkles,
+  Calendar,
+  Building2,
+} from "lucide-react";
+import { toast } from "sonner";
+import { motion } from "framer-motion";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { deleteCoverLetter } from "@/actions/cover-letter";
 
 export default function CoverLetterList({ coverLetters }) {
@@ -40,74 +40,106 @@ export default function CoverLetterList({ coverLetters }) {
 
   if (!coverLetters?.length) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>No Cover Letters Yet</CardTitle>
-          <CardDescription>
-            Create your first cover letter to get started
-          </CardDescription>
-        </CardHeader>
-      </Card>
+      <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-10 text-center shadow-xl">
+        <div className="flex justify-center mb-4">
+          <Sparkles className="h-8 w-8 text-indigo-400" />
+        </div>
+        <h2 className="text-2xl font-semibold mb-2">
+          No Cover Letters Yet
+        </h2>
+        <p className="text-muted-foreground">
+          Start generating AI-powered cover letters to stand out.
+        </p>
+      </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      {coverLetters.map((letter) => (
-        <Card key={letter.id} className="group relative ">
-          <CardHeader>
-            <div className="flex items-start justify-between">
-              <div>
-                <CardTitle className="text-xl gradient-title">
-                  {letter.jobTitle} at {letter.companyName}
-                </CardTitle>
-                <CardDescription>
-                  Created {format(new Date(letter.createdAt), "PPP")}
-                </CardDescription>
+    <div className="grid gap-6">
+      {coverLetters.map((letter, index) => (
+        <motion.div
+          key={letter.id}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.05 }}
+          className="group relative rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-xl hover:border-indigo-500/40 transition-all duration-300"
+        >
+          {/* Header Section */}
+          <div className="flex items-start justify-between gap-6">
+            <div className="space-y-2">
+              <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                {letter.jobTitle}
+              </h3>
+
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1">
+                  <Building2 className="h-4 w-4" />
+                  {letter.companyName}
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <Calendar className="h-4 w-4" />
+                  {format(new Date(letter.createdAt), "PPP")}
+                </div>
               </div>
-              <div className="flex space-x-2">
-                <AlertDialog>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2 opacity-80 group-hover:opacity-100 transition">
+              <Button
+                variant="outline"
+                size="icon"
+                className="hover:bg-indigo-500/10"
+                onClick={() =>
+                  router.push(`/ai-cover-letter/${letter.id}`)
+                }
+              >
+                <Eye className="h-4 w-4" />
+              </Button>
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => router.push(`/ai-cover-letter/${letter.id}`)}
+                    className="hover:bg-red-500/10"
                   >
-                    <Eye className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
-                  <AlertDialogTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Delete Cover Letter?</AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete your cover letter for {letter.jobTitle} at{" "}
-                        {letter.companyName}.
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={() => handleDelete(letter.id)}
-                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </div>
+                </AlertDialogTrigger>
+
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Delete Cover Letter?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will permanently delete your cover letter
+                      for {letter.jobTitle} at {letter.companyName}.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => handleDelete(letter.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white"
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
-          </CardHeader>
-          <CardContent>
-            <div className="text-muted-foreground text-sm line-clamp-3">
-              {letter.jobDescription}
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+
+          {/* Preview Text */}
+          <div className="mt-4 text-sm text-muted-foreground line-clamp-3">
+            {letter.jobDescription}
+          </div>
+        </motion.div>
       ))}
     </div>
   );

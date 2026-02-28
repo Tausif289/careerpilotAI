@@ -1,93 +1,206 @@
-import React from 'react'
-import { Button } from "./ui/button";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
   SignedIn,
   SignedOut,
+  SignInButton,
   UserButton,
-} from '@clerk/nextjs'
+} from "@clerk/nextjs";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChevronDown, FileText, GraduationCap, LayoutDashboard, PenBox, StarsIcon } from 'lucide-react';
-import { checkUser } from '@/lib/checkuser';
 
-const Header = async() => {
+import {
+  ChevronDown,
+  FileText,
+  GraduationCap,
+  PenBox,
+  StarsIcon,
+  Menu,
+} from "lucide-react";
+
+import { checkUser } from "@/lib/checkuser";
+
+const Header = async () => {
   await checkUser();
+
   return (
-    <header className="fixed top-0 w-full border-b bg-background/80 backdrop-blur-md z-50 supports-[backdrop-filter]:bg-background/60">
-      <nav className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/">
-          <Image
-            src={"/logo.png"}
-            alt="Sensai Logo"
-            width={200}
-            height={60}
-            className="h-12 py-1 w-auto object-contain"
-          />
-        </Link>
-        
-        <div className="flex items-center space-x-2 md:space-x-4">
+    <header className="fixed top-0 w-full z-50 
+      bg-slate-950/80 backdrop-blur-xl 
+      border-b border-white/10 
+      shadow-lg shadow-black/20">
+
+      <nav className="container mx-auto px-6 h-16 flex items-center justify-between">
+
+     <Link href="/" className="group">
+  <h1
+    className="
+      text-3xl md:text-4xl 
+      font-extrabold tracking-tight 
+      bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 
+      bg-clip-text text-transparent
+      drop-shadow-sm
+      transition-all duration-300 
+      group-hover:scale-105
+    "
+  >
+    Career<span className="text-white">Pilot</span>
+    <span className="ml-2 px-2 py-0.5 text-xs md:text-sm font-bold 
+      bg-gradient-to-r from-indigo-500 to-purple-500 
+      text-white rounded-md shadow-md">
+      AI
+    </span>
+  </h1>
+</Link>
+
+        {/* Desktop Navigation */}
+        <div className="hidden lg:flex items-center gap-8">
+
           <SignedIn>
-            <Link href="/dashboard">
-              <Button
-                variant="outline"
-                className="hidden md:inline-flex items-center gap-2"
-              >
-                 <LayoutDashboard className="h-4 w-4" /> 
-                Industry Insights
-              </Button>
-              <Button variant="ghost" className="md:hidden w-10 h-10 p-0">
-                <LayoutDashboard className="h-4 w-4" />
-              </Button>
+            {/* Styled Nav Links */}
+            <Link
+              href="/dashboard"
+              className="
+    relative px-4 py-2
+    text-base font-semibold tracking-wide
+    text-gray-200
+    transition-all duration-300
+    hover:text-white
+    hover:scale-105
+
+    after:absolute after:left-0 after:-bottom-1
+    after:h-[3px] after:w-0
+    after:bg-gradient-to-r after:from-indigo-500 after:to-purple-500
+    after:rounded-full
+    after:transition-all after:duration-300
+    hover:after:w-full
+  "
+            >
+              Dashboard
             </Link>
 
-            {/* Growth Tools Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="flex items-center gap-2">
-                  <StarsIcon className="h-4 w-4" />
-                  <span className="hidden md:block">Growth Tools</span>
-                  <ChevronDown className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuItem asChild>
-                  <Link href="/resume" className="flex items-center gap-2">
-                    <FileText className="h-4 w-4" />
-                    Build Resume
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/ai-cover-letter"
-                    className="flex items-center gap-2"
-                  >
-                    <PenBox className="h-4 w-4" />
-                    Cover Letter
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/interview" className="flex items-center gap-2">
-                    <GraduationCap className="h-4 w-4" />
-                    Interview Prep
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SignedIn>
+            <Link
+              href="/resume"
+             className="
+    relative px-4 py-2
+    text-base font-semibold tracking-wide
+    text-gray-200
+    transition-all duration-300
+    hover:text-white
+    hover:scale-105
 
+    after:absolute after:left-0 after:-bottom-1
+    after:h-[3px] after:w-0
+    after:bg-gradient-to-r after:from-indigo-500 after:to-purple-500
+    after:rounded-full
+    after:transition-all after:duration-300
+    hover:after:w-full
+  "
+            >
+              Resume Builder
+            </Link>
+
+            <Link
+              href="/ai-cover-letter"
+             className="
+    relative px-4 py-2
+    text-base font-semibold tracking-wide
+    text-gray-200
+    transition-all duration-300
+    hover:text-white
+    hover:scale-105
+
+    after:absolute after:left-0 after:-bottom-1
+    after:h-[3px] after:w-0
+    after:bg-gradient-to-r after:from-indigo-500 after:to-purple-500
+    after:rounded-full
+    after:transition-all after:duration-300
+    hover:after:w-full
+  "
+            >
+              Cover Letter
+            </Link>
+
+            <Link
+              href="/interview"
+             className="
+    relative px-4 py-2
+    text-base font-semibold tracking-wide
+    text-gray-200
+    transition-all duration-300
+    hover:text-white
+    hover:scale-105
+
+    after:absolute after:left-0 after:-bottom-1
+    after:h-[3px] after:w-0
+    after:bg-gradient-to-r after:from-indigo-500 after:to-purple-500
+    after:rounded-full
+    after:transition-all after:duration-300
+    hover:after:w-full
+  "
+            >
+              Interview Prep
+            </Link>
+
+           
+
+          </SignedIn>
+        </div>
+
+        {/* Right Side */}
+        <div className="flex items-center gap-3">
+
+          {/* Mobile Menu */}
+          <div className="lg:hidden">
+            <SignedIn>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="text-gray-300">
+                    <Menu className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent
+                  align="end"
+                  className="w-56 rounded-2xl 
+                  bg-slate-900 border border-white/10 
+                  shadow-2xl shadow-black/40 p-2"
+                >
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="hover:text-indigo-400">Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/resume" className="hover:text-indigo-400">Resume Builder</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/ai-cover-letter" className="hover:text-indigo-400">Cover Letter</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/interview" className="hover:text-indigo-400">Interview Prep</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </SignedIn>
+          </div>
+
+          {/* Auth Buttons */}
           <SignedOut>
             <SignInButton>
-              <Button variant="outline">Sign In</Button>
+              <Button
+                variant="outline"
+                className="rounded-xl border-white/20 
+                text-gray-300 hover:bg-white/10 
+                hover:border-indigo-500 transition"
+              >
+                Sign In
+              </Button>
             </SignInButton>
           </SignedOut>
 
@@ -95,18 +208,17 @@ const Header = async() => {
             <UserButton
               appearance={{
                 elements: {
-                  avatarBox: "w-10 h-10",
-                  userButtonPopoverCard: "shadow-xl",
-                  userPreviewMainIdentifier: "font-semibold",
+                  avatarBox:
+                    "w-10 h-10 ring-2 ring-indigo-500 ring-offset-2 ring-offset-slate-950",
                 },
               }}
               afterSignOutUrl="/"
             />
           </SignedIn>
         </div>
-       </nav>
+      </nav>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

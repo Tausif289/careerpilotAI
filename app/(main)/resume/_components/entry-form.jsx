@@ -16,7 +16,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { entrySchema } from "@/app/lib/schema";
-import { Sparkles, PlusCircle, X, Pencil, Save, Loader2 } from "lucide-react";
+import {
+  Sparkles,
+  PlusCircle,
+  X,
+  Loader2,
+} from "lucide-react";
 import { improveWithAI } from "@/actions/resume";
 import { toast } from "sonner";
 import useFetch from "@/hooks/use-fetch";
@@ -76,18 +81,16 @@ export function EntryForm({ type, entries, onChange }) {
     error: improveError,
   } = useFetch(improveWithAI);
 
-  // Add this effect to handle the improvement result
   useEffect(() => {
     if (improvedContent && !isImproving) {
       setValue("description", improvedContent);
-      toast.success("Description improved successfully!");
+      toast.success("✨ Description improved successfully!");
     }
     if (improveError) {
       toast.error(improveError.message || "Failed to improve description");
     }
   }, [improvedContent, improveError, isImproving, setValue]);
 
-  // Replace handleImproveDescription with this
   const handleImproveDescription = async () => {
     const description = watch("description");
     if (!description) {
@@ -97,35 +100,45 @@ export function EntryForm({ type, entries, onChange }) {
 
     await improveWithAIFn({
       current: description,
-      type: type.toLowerCase(), // 'experience', 'education', or 'project'
+      type: type.toLowerCase(),
     });
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+
+      {/* Existing Entries */}
       <div className="space-y-4">
         {entries.map((item, index) => (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
+          <Card
+            key={index}
+            className="bg-white/5 backdrop-blur-xl border border-white/10 
+            shadow-xl hover:shadow-indigo-500/10 transition-all duration-300"
+          >
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-base font-semibold 
+              bg-gradient-to-r from-indigo-400 to-purple-400 
+              bg-clip-text text-transparent">
                 {item.title} @ {item.organization}
               </CardTitle>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
                 type="button"
+                className="hover:bg-red-500/20"
                 onClick={() => handleDelete(index)}
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 text-red-400" />
               </Button>
             </CardHeader>
+
             <CardContent>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-400">
                 {item.current
                   ? `${item.startDate} - Present`
                   : `${item.startDate} - ${item.endDate}`}
               </p>
-              <p className="mt-2 text-sm whitespace-pre-wrap">
+              <p className="mt-3 text-sm whitespace-pre-wrap text-gray-200">
                 {item.description}
               </p>
             </CardContent>
@@ -133,117 +146,98 @@ export function EntryForm({ type, entries, onChange }) {
         ))}
       </div>
 
+      {/* Add Entry Form */}
       {isAdding && (
-        <Card>
+        <Card className="bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl">
           <CardHeader>
-            <CardTitle>Add {type}</CardTitle>
+            <CardTitle className="text-xl font-bold 
+            bg-gradient-to-r from-white via-indigo-400 to-purple-400 
+            bg-clip-text text-transparent">
+              Add {type}
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+
+          <CardContent className="space-y-6">
+
+            {/* Title + Organization */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Input
-                  placeholder="Title/Position"
-                  {...register("title")}
-                  error={errors.title}
-                />
-                {errors.title && (
-                  <p className="text-sm text-red-500">{errors.title.message}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Input
-                  placeholder="Organization/Company"
-                  {...register("organization")}
-                  error={errors.organization}
-                />
-                {errors.organization && (
-                  <p className="text-sm text-red-500">
-                    {errors.organization.message}
-                  </p>
-                )}
-              </div>
+              <Input
+                placeholder="Title/Position"
+                {...register("title")}
+                className="bg-black/40 border-white/10 focus:ring-indigo-500"
+              />
+              <Input
+                placeholder="Organization/Company"
+                {...register("organization")}
+                className="bg-black/40 border-white/10 focus:ring-indigo-500"
+              />
             </div>
 
+            {/* Dates */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Input
-                  type="month"
-                  {...register("startDate")}
-                  error={errors.startDate}
-                />
-                {errors.startDate && (
-                  <p className="text-sm text-red-500">
-                    {errors.startDate.message}
-                  </p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Input
-                  type="month"
-                  {...register("endDate")}
-                  disabled={current}
-                  error={errors.endDate}
-                />
-                {errors.endDate && (
-                  <p className="text-sm text-red-500">
-                    {errors.endDate.message}
-                  </p>
-                )}
-              </div>
+              <Input
+                type="month"
+                {...register("startDate")}
+                className="bg-black/40 border-white/10"
+              />
+              <Input
+                type="month"
+                {...register("endDate")}
+                disabled={current}
+                className="bg-black/40 border-white/10"
+              />
             </div>
 
-            <div className="flex items-center space-x-2">
+            {/* Current Checkbox */}
+            <div className="flex items-center gap-3">
               <input
                 type="checkbox"
-                id="current"
                 {...register("current")}
                 onChange={(e) => {
                   setValue("current", e.target.checked);
-                  if (e.target.checked) {
-                    setValue("endDate", "");
-                  }
+                  if (e.target.checked) setValue("endDate", "");
                 }}
+                className="accent-indigo-500"
               />
-              <label htmlFor="current">Current {type}</label>
+              <label className="text-sm text-gray-300">
+                Current {type}
+              </label>
             </div>
 
-            <div className="space-y-2">
-              <Textarea
-                placeholder={`Description of your ${type.toLowerCase()}`}
-                className="h-32"
-                {...register("description")}
-                error={errors.description}
-              />
-              {errors.description && (
-                <p className="text-sm text-red-500">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
+            {/* Description */}
+            <Textarea
+              placeholder={`Description of your ${type.toLowerCase()}`}
+              className="h-32 bg-black/40 border-white/10 focus:ring-indigo-500"
+              {...register("description")}
+            />
+
+            {/* AI Improve Button */}
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={handleImproveDescription}
               disabled={isImproving || !watch("description")}
+              className="border-indigo-500/40 text-indigo-300 
+              hover:bg-indigo-500/20 transition-all"
             >
               {isImproving ? (
                 <>
                   <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Improving...
+                  Improving with AI...
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-4 w-4 mr-2" />
+                  <Sparkles className="h-4 w-4 mr-2 text-indigo-400" />
                   Improve with AI
                 </>
               )}
             </Button>
           </CardContent>
-          <CardFooter className="flex justify-end space-x-2">
+
+          <CardFooter className="flex justify-end gap-3">
             <Button
-              type="button"
-              variant="outline"
+              variant="ghost"
               onClick={() => {
                 reset();
                 setIsAdding(false);
@@ -251,7 +245,11 @@ export function EntryForm({ type, entries, onChange }) {
             >
               Cancel
             </Button>
-            <Button type="button" onClick={handleAdd}>
+
+            <Button
+              onClick={handleAdd}
+              className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-lg"
+            >
               <PlusCircle className="h-4 w-4 mr-2" />
               Add Entry
             </Button>
@@ -259,9 +257,11 @@ export function EntryForm({ type, entries, onChange }) {
         </Card>
       )}
 
+      {/* Add Button */}
       {!isAdding && (
         <Button
-          className="w-full"
+          className="w-full bg-white/5 backdrop-blur-xl border border-white/10 
+          hover:bg-indigo-500/20 transition-all"
           variant="outline"
           onClick={() => setIsAdding(true)}
         >

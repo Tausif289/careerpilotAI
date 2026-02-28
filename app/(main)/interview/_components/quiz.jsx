@@ -16,6 +16,8 @@ import { generateQuiz, saveQuizResult } from "@/actions/interview";
 import QuizResult from "./quiz-result";
 import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
+import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 
 export default function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -85,10 +87,13 @@ export default function Quiz() {
   };
 
   if (generatingQuiz) {
-    return <BarLoader className="mt-4" width={"100%"} color="gray" />;
+    return (
+      <div className="px-2 mt-6">
+        <BarLoader width={"100%"} color="#6366f1" />
+      </div>
+    );
   }
 
-  // Show results if quiz is completed
   if (resultData) {
     return (
       <div className="mx-2">
@@ -99,79 +104,125 @@ export default function Quiz() {
 
   if (!quizData) {
     return (
-      <Card className="mx-2">
-        <CardHeader>
-          <CardTitle>Ready to test your knowledge?</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            This quiz contains 10 questions specific to your industry and
-            skills. Take your time and choose the best answer for each question.
-          </p>
-        </CardContent>
-        <CardFooter>
-          <Button onClick={generateQuizFn} className="w-full">
-            Start Quiz
-          </Button>
-        </CardFooter>
-      </Card>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <Card className="mx-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl">
+          <CardHeader>
+            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+              Ready to test your knowledge?
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-400">
+              This AI-powered quiz contains 10 personalized questions based on
+              your industry and skills. Choose wisely and unlock insights.
+            </p>
+          </CardContent>
+          <CardFooter>
+            <Button
+              onClick={generateQuizFn}
+              className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 rounded-full"
+            >
+              <Sparkles className="h-4 w-4 mr-2" />
+              Start Quiz
+            </Button>
+          </CardFooter>
+        </Card>
+      </motion.div>
     );
   }
 
   const question = quizData[currentQuestion];
+  const progress =
+    ((currentQuestion + 1) / quizData.length) * 100;
 
   return (
-    <Card className="mx-2">
-      <CardHeader>
-        <CardTitle>
-          Question {currentQuestion + 1} of {quizData.length}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-lg font-medium">{question.question}</p>
-        <RadioGroup
-          onValueChange={handleAnswer}
-          value={answers[currentQuestion]}
-          className="space-y-2"
-        >
-          {question.options.map((option, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <RadioGroupItem value={option} id={`option-${index}`} />
-              <Label htmlFor={`option-${index}`}>{option}</Label>
-            </div>
-          ))}
-        </RadioGroup>
+    <motion.div
+      key={currentQuestion}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <Card className="mx-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl overflow-hidden">
 
-        {showExplanation && (
-          <div className="mt-4 p-4 bg-muted rounded-lg">
-            <p className="font-medium">Explanation:</p>
-            <p className="text-muted-foreground">{question.explanation}</p>
-          </div>
-        )}
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        {!showExplanation && (
-          <Button
-            onClick={() => setShowExplanation(true)}
-            variant="outline"
-            disabled={!answers[currentQuestion]}
+        {/* Progress Bar */}
+        <div className="h-1 bg-white/10">
+          <div
+            className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-500"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+
+        <CardHeader>
+          <CardTitle className="text-2xl font-semibold text-white">
+            Question {currentQuestion + 1} of {quizData.length}
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-6">
+          <p className="text-lg font-medium text-white">
+            {question.question}
+          </p>
+
+          <RadioGroup
+            onValueChange={handleAnswer}
+            value={answers[currentQuestion]}
+            className="space-y-3"
           >
-            Show Explanation
-          </Button>
-        )}
-        <Button
-          onClick={handleNext}
-          disabled={!answers[currentQuestion] || savingResult}
-          className="ml-auto"
-        >
-          {savingResult && (
-            <BarLoader className="mt-4" width={"100%"} color="gray" />
+            {question.options.map((option, index) => (
+              <div
+                key={index}
+                className="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition cursor-pointer border border-white/10"
+              >
+                <RadioGroupItem value={option} id={`option-${index}`} />
+                <Label
+                  htmlFor={`option-${index}`}
+                  className="cursor-pointer text-gray-300"
+                >
+                  {option}
+                </Label>
+              </div>
+            ))}
+          </RadioGroup>
+
+          {showExplanation && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/30"
+            >
+              <p className="font-semibold text-indigo-300">
+                AI Explanation
+              </p>
+              <p className="text-gray-300 mt-2">
+                {question.explanation}
+              </p>
+            </motion.div>
           )}
-          {currentQuestion < quizData.length - 1
-            ? "Next Question"
-            : "Finish Quiz"}
-        </Button>
-      </CardFooter>
-    </Card>
+        </CardContent>
+
+        <CardFooter className="flex justify-between">
+          {!showExplanation && (
+            <Button
+              onClick={() => setShowExplanation(true)}
+              variant="outline"
+              disabled={!answers[currentQuestion]}
+              className="border-white/20 hover:bg-white/10"
+            >
+              Show Explanation
+            </Button>
+          )}
+
+          <Button
+            onClick={handleNext}
+            disabled={!answers[currentQuestion] || savingResult}
+            className="ml-auto bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 rounded-full px-6"
+          >
+            {currentQuestion < quizData.length - 1
+              ? "Next Question"
+              : "Finish Quiz"}
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 }
