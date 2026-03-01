@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+CareerPilot AI
 
-## Getting Started
+Live Demo : https://careerpilotai-iota.vercel.app/
 
-First, run the development server:
+CareerPilot AI is a next-generation career assistant designed to help job seekers optimize resumes, prepare for interviews, gain industry insights, and create personalized cover letters. It leverages AI to give actionable recommendations, helping users land the right job faster.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🚀 Features
+1. Resume & ATS Optimization
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Calculate ATS compatibility scores
+Suggest missing keywords to increase match with job descriptions
+Generate AI-powered resume snippets tailored to each job
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+2.Job Interview Preparation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Personalized interview question suggestions based on your resume and target industry
+AI-driven tips for improving your answers
 
-## Learn More
+3.Industry Insights
 
-To learn more about Next.js, take a look at the following resources:
+Get market and role-specific insights for your industry
+Personalized career recommendations based on trends
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4.Cover Letter Generator
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Create professional, job-specific cover letters
+AI suggests tailored language to match company culture and job role
 
-## Deploy on Vercel
+5.Dashboard & Personalization
 
+Keep track of resumes submitted
+Save industry insights and job prep suggestions
+Organize your career prep in one dashboard
+
+🛠 Tech Stack
+
+Frontend: Next.js 13+, React 18, TailwindCSS
+Backend: Node.js, Server Actions (Next.js)
+Database: Prisma + PostgreSQL
+AI: Google Gemini API for personalized insights and content generation
+Deployment: Vercel
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
