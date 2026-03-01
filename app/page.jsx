@@ -90,71 +90,69 @@ export default function LandingPage() {
         </div>
       </section>
 
+{/* ================= CTA ================= */}
+<section className="relative w-full py-32 overflow-hidden">
 
+  {/* Background Gradient (Logo Colors) */}
+  <div className="absolute inset-0 bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400"></div>
 
-      {/* ================= CTA ================= */}
-      <section className="relative w-full py-32 overflow-hidden">
+  {/* Glow Orbs */}
+  <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-white/10 rounded-full blur-[120px]"></div>
+  <div className="absolute bottom-[-120px] right-[-120px] w-96 h-96 bg-white/10 rounded-full blur-[120px]"></div>
 
-        {/* Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-indigo-950 to-purple-950"></div>
+  <div className="relative container mx-auto px-6 text-center">
 
-        {/* Glow Orbs */}
-        <div className="absolute top-[-100px] left-[-100px] w-96 h-96 bg-indigo-600/30 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-120px] right-[-120px] w-96 h-96 bg-purple-600/30 rounded-full blur-[120px]"></div>
+    {/* Badge */}
+    <div className="inline-flex items-center px-4 py-2 mb-6 rounded-full 
+        bg-white/20 border border-white/30 text-white text-sm backdrop-blur-md">
+      🚀 AI-Powered Career Acceleration
+    </div>
 
-        <div className="relative container mx-auto px-6 text-center">
+    {/* Headline */}
+    <h2 className="text-4xl md:text-6xl font-extrabold 
+        bg-gradient-to-r from-white via-white/90 to-white/80
+        bg-clip-text text-transparent mb-6 leading-tight">
+      Design Your Career.
+      <br className="hidden md:block" />
+      Let AI Engineer Your Success.
+    </h2>
 
-          {/* Badge */}
-          <div className="inline-flex items-center px-4 py-2 mb-6 rounded-full 
-      bg-white/5 border border-white/10 text-indigo-300 text-sm backdrop-blur-md">
-            🚀 AI-Powered Career Acceleration
-          </div>
+    {/* Subtext */}
+    <p className="text-white/90 max-w-2xl mx-auto mb-10 text-lg md:text-xl leading-relaxed">
+      Unlock intelligent resume building, predictive industry insights,
+      and AI-driven interview mastery — all in one powerful platform.
+    </p>
 
-          {/* Headline */}
-          <h2 className="text-4xl md:text-6xl font-extrabold 
-      bg-gradient-to-r from-white via-indigo-300 to-purple-400 
-      bg-clip-text text-transparent mb-6 leading-tight">
-            Design Your Career.
-            <br className="hidden md:block" />
-            Let AI Engineer Your Success.
-          </h2>
-
-          {/* Subtext */}
-          <p className="text-gray-300 max-w-2xl mx-auto mb-10 text-lg md:text-xl leading-relaxed">
-            Unlock intelligent resume building, predictive industry insights,
-            and AI-driven interview mastery — all in one powerful platform.
-          </p>
-
-          {/* CTA Button */}
-          <Link href="/dashboard">
-            <Button
-              size="lg"
-              className="
+    {/* CTA Button */}
+    <Link href="/dashboard">
+      <Button
+        size="lg"
+        className="
           group relative px-10 py-6
           rounded-2xl
-          bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600
+          bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500
           text-white font-semibold tracking-wide
-          shadow-[0_15px_40px_rgba(99,102,241,0.5)]
+          shadow-[0_15px_40px_rgba(139,92,246,0.5)]
           hover:shadow-[0_20px_60px_rgba(139,92,246,0.6)]
           hover:scale-105
           transition-all duration-300
           overflow-hidden
         "
-            >
-              <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition duration-300 blur-xl"></span>
+      >
+        <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition duration-300 blur-xl"></span>
 
-              Activate My AI Career System
-              <ArrowRight className="ml-3 h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
-            </Button>
-          </Link>
+        Activate My AI Career System
+        <ArrowRight className="ml-3 h-5 w-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+      </Button>
+    </Link>
 
-          {/* Small trust text */}
-          <p className="mt-6 text-sm text-gray-400">
-            No credit card required • Start free • Upgrade anytime
-          </p>
+    {/* Small trust text */}
+    <p className="mt-6 text-sm text-white/70">
+      No credit card required • Start free • Upgrade anytime
+    </p>
 
-        </div>
-      </section>
+  </div>
+</section>
 
   {/* ================= TESTIMONIALS ================= */}
 <section className="relative w-full py-24 overflow-hidden">
