@@ -1,44 +1,75 @@
-CareerPilot AI
+🚀 CareerPilot AI
+🔗 Live Demo: https://careerpilot-ai-alpha.vercel.app/
 
-Live Demo : https://careerpilot-ai-alpha.vercel.app/
+CareerPilot AI is an AI-powered career assistant that helps job seekers enhance resumes, prepare for interviews, and make data-driven career decisions. It delivers personalized insights and actionable recommendations to improve hiring success rates.
 
-CareerPilot AI is a next-generation career assistant designed to help job seekers optimize resumes, prepare for interviews, gain industry insights, and create personalized cover letters. It leverages AI to give actionable recommendations, helping users land the right job faster.
-
-🚀 Features
-1. Resume & ATS Optimization
-
-Calculate ATS compatibility scores
-Suggest missing keywords to increase match with job descriptions
-Generate AI-powered resume snippets tailored to each job
-
-2.Job Interview Preparation
-
-Personalized interview question suggestions based on your resume and target industry
-AI-driven tips for improving your answers
-
-3.Industry Insights
-
-Get market and role-specific insights for your industry
-Personalized career recommendations based on trends
-
-4.Cover Letter Generator
-
-Create professional, job-specific cover letters
-AI suggests tailored language to match company culture and job role
-
-5.Dashboard & Personalization
-
-Keep track of resumes submitted
-Save industry insights and job prep suggestions
-Organize your career prep in one dashboard
-
+💡 Key Highlights
+Built an end-to-end AI-driven career platform to streamline job preparation
+Improved resume-job matching using ATS optimization techniques
+Delivered personalized interview preparation & industry insights
+Designed a scalable full-stack architecture using modern technologies
+✨ Features
+📄 Resume & ATS Optimization
+Calculates ATS compatibility score
+Suggests missing keywords based on job descriptions
+Generates AI-powered resume content tailored to specific roles
+🎯 Interview Preparation
+Provides personalized interview questions
+AI-generated answer improvement suggestions
+Role & industry-specific preparation guidance
+📊 Industry Insights
+Real-time market trends & role insights
+AI-driven career recommendations
+✉️ Cover Letter Generator
+Generates custom job-specific cover letters
+Aligns tone with company culture & role expectations
+📌 Dashboard & Personalization
+Track job applications & resumes
+Save insights and preparation material
+Centralized career management dashboard
 🛠 Tech Stack
 
-Frontend: Next.js 13+, React 18, TailwindCSS
-Backend: Node.js, Server Actions (Next.js)
-Database: Prisma + PostgreSQL
-AI: Google Gemini API for personalized insights and content generation
-Deployment: Vercel
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Frontend:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 13+
+React 18
+Tailwind CSS
+
+Backend:
+
+Node.js
+Next.js Server Actions
+
+Database:
+
+PostgreSQL (via Prisma ORM)
+
+AI Integration:
+
+Google Gemini API
+
+Deployment:
+
+Vercel
+⚡ Impact
+Reduced manual effort in resume customization
+Increased chances of passing ATS screening systems
+Provided personalized career guidance at scale
+🧠 What I Learned
+Building AI-powered SaaS applications
+Integrating LLM APIs for real-world use cases
+Designing scalable full-stack architectures
+Enhancing user experience with personalization
+🔗 Deployment
+
+Deployed using Vercel for fast, scalable hosting.
+
+📌 Why This Project Stands Out
+
+CareerPilot AI goes beyond basic resume tools by combining:
+
+AI personalization
+Industry intelligence
+End-to-end job preparation
+
+➡️ Making it a complete career growth platform
