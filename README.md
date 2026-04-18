@@ -1,6 +1,6 @@
 CareerPilot AI
 
-Live Demo : https://careerpilotai-iota.vercel.app/
+Live Demo : https://careerpilot-ai-alpha.vercel.app/
 
 CareerPilot AI is a next-generation career assistant designed to help job seekers optimize resumes, prepare for interviews, gain industry insights, and create personalized cover letters. It leverages AI to give actionable recommendations, helping users land the right job faster.
 
