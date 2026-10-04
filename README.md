@@ -236,7 +236,7 @@ Contributions, issues, and feature requests are welcome. Feel free to open an is
 
 ## 📬 Contact
 
-Built by **Your Name** · [LinkedIn](https://linkedin.com/in/your-profile) · [GitHub](https://github.com/Tausif289)
+Built by **Your Name** · [LinkedIn](https://lnkd.in/p/gegMtxG4) · [GitHub](https://github.com/Tausif289/careerpilotAI)
 
 ---
 
