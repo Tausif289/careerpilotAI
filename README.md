@@ -9,9 +9,10 @@
 ![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Prisma-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Clerk](https://img.shields.io/badge/Auth-Clerk-6C47FF?style=for-the-badge&logo=clerk&logoColor=white)
 ![Gemini](https://img.shields.io/badge/Google-Gemini%20API-4285F4?style=for-the-badge&logo=google&logoColor=white)
 
-[Live Demo](https://careerpilot-ai-alpha.vercel.app/) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started)
+[Live Demo](https://careerpilot-ai-alpha.vercel.app/) · [Features](#-features) · [Tech Stack](#-tech-stack) · [Getting Started](#-getting-started) · [Project Structure](#-project-structure)
 
 </div>
 
@@ -19,7 +20,7 @@
 
 ## 📖 Overview
 
-**CareerPilot AI** is a full-stack AI career platform that helps job seekers build ATS-friendly resumes, prepare for interviews, write tailored cover letters, and make data-driven career decisions — all from one dashboard.
+**CareerPilot AI** is a full-stack AI career platform that helps job seekers build ATS-friendly resumes, prepare for interviews, write tailored cover letters, and make data-driven career decisions, all from one dashboard.
 
 Instead of juggling separate tools, CareerPilot AI combines **AI personalization**, **industry intelligence**, and **end-to-end job preparation** in a single place.
 
@@ -27,7 +28,7 @@ Instead of juggling separate tools, CareerPilot AI combines **AI personalization
 
 👉 **[careerpilot-ai-alpha.vercel.app](https://careerpilot-ai-alpha.vercel.app/)**
 
-Sign up, upload your resume, and get your ATS score, interview prep, and cover letter in minutes.
+Sign up, complete onboarding, and start building your resume, checking your ATS score, and practicing interviews.
 
 ---
 
@@ -39,28 +40,31 @@ Sign up, upload your resume, and get your ATS score, interview prep, and cover l
 
 ## ✨ Features
 
-### 📄 Resume & ATS Optimization
-- Calculates an **ATS compatibility score** for your resume
-- Suggests **missing keywords** based on the target job description
-- Generates **AI-written resume content** tailored to specific roles
+### 📄 Resume Builder & ATS Checker
+- Build your resume with a guided, entry-based **resume builder**
+- Calculate an **ATS compatibility score** against a job description
+- Get **missing keyword** suggestions
+- Generate **AI-written resume content** tailored to specific roles
 
 ### 🎯 Interview Preparation
-- Personalized, role-specific interview questions
+- Personalized, role- and industry-specific **quizzes**
+- **Mock interview** mode with results after each attempt
 - AI-generated suggestions to improve your answers
-- Industry-specific preparation guidance
+- **Performance chart and stats** to track progress over time
 
-### 📊 Industry Insights
-- Market trends and role insights
+### 📊 Industry Insights Dashboard
+- Market trends and role insights for your industry
 - AI-driven career recommendations
+- Personalized after a short **onboarding** (industry, experience, skills)
 
-### ✉️ Cover Letter Generator
+### ✉️ AI Cover Letter Generator
 - Job-specific cover letters in seconds
 - Tone aligned with company culture and role expectations
+- Save, list, preview, and revisit past cover letters
 
-### 📌 Dashboard & Personalization
-- Track job applications and resumes
-- Save insights and preparation material
-- Centralized career management
+### 📌 Personalization
+- Secure sign-up and sign-in
+- Saved resumes, cover letters, quiz results, and insights in one account
 
 ---
 
@@ -68,9 +72,11 @@ Sign up, upload your resume, and get your ATS score, interview prep, and cover l
 
 | Layer | Technologies |
 |---|---|
-| **Frontend** | Next.js 13+, React 18, Tailwind CSS |
+| **Frontend** | Next.js 13+ (App Router), React 18, Tailwind CSS, shadcn/ui |
 | **Backend** | Node.js, Next.js Server Actions |
 | **Database** | PostgreSQL with Prisma ORM |
+| **Authentication** | Clerk |
+| **Background Jobs** | Inngest |
 | **AI** | Google Gemini API |
 | **Deployment** | Vercel |
 
@@ -79,21 +85,19 @@ Sign up, upload your resume, and get your ATS score, interview prep, and cover l
 ## 🏗 Architecture
 
 ```text
+                    ┌──────────────► Clerk (auth)
+                    │
 User ──► Next.js (React UI) ──► Server Actions ──┬──► Prisma ──► PostgreSQL
-                                                 └──► Google Gemini API
+                    │                            └──► Google Gemini API
+                    │
+                    └──► /api/inngest ──► Inngest (background jobs)
 ```
 
-- **Server Actions** handle business logic without a separate API layer
+- **Server Actions** (`/actions`) hold the business logic: ATS, cover letters, dashboard insights, interview, resume, and user management
 - **Prisma** provides type-safe database access
+- **Clerk + middleware** protect private routes
+- **Inngest** runs background jobs through the `/api/inngest` route
 - **Gemini** powers resume content, ATS suggestions, interview prep, insights, and cover letters
-
----
-
-## ⚡ Impact
-
-- ⏱️ Reduces manual effort in tailoring resumes to each job
-- ✅ Improves chances of passing ATS screening
-- 🎓 Delivers personalized career guidance at scale
 
 ---
 
@@ -103,6 +107,7 @@ User ──► Next.js (React UI) ──► Server Actions ──┬──► Pr
 - Node.js 18+
 - A PostgreSQL database
 - A [Google Gemini API key](https://aistudio.google.com/)
+- A [Clerk](https://clerk.com/) application
 
 ### Installation
 
@@ -114,10 +119,10 @@ cd careerpilot-ai
 # 2. Install dependencies
 npm install
 
-# 3. Set up environment variables
-# create a .env file (see Environment Variables below)
+# 3. Create a .env file (see Environment Variables below)
 
-# 4. Run database migrations
+# 4. Generate the Prisma client and run migrations
+npx prisma generate
 npx prisma migrate dev
 
 # 5. Start the dev server
@@ -126,16 +131,29 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+To run background jobs locally, start the Inngest dev server in a second terminal:
+
+```bash
+npx inngest-cli@latest dev
+```
+
 ### Environment Variables
 
 Create a `.env` file in the project root:
 
 ```env
+# Database
 DATABASE_URL="postgresql://user:password@host:5432/dbname"
-GEMINI_API_KEY="your_gemini_api_key"
-```
 
-> Add any other keys your project uses (e.g., authentication provider keys).
+# AI
+GEMINI_API_KEY="your_gemini_api_key"
+
+# Clerk authentication
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="your_clerk_publishable_key"
+CLERK_SECRET_KEY="your_clerk_secret_key"
+NEXT_PUBLIC_CLERK_SIGN_IN_URL="/sign-in"
+NEXT_PUBLIC_CLERK_SIGN_UP_URL="/sign-up"
+```
 
 ---
 
@@ -143,19 +161,41 @@ GEMINI_API_KEY="your_gemini_api_key"
 
 ```text
 careerpilot-ai/
-├── actions/          # Server Actions (AI + database logic)
-├── app/              # Next.js routes, pages, and layouts
-├── components/       # Reusable UI components
-├── data/             # Static data used across the app
-├── hooks/            # Custom React hooks
-├── lib/              # Utilities and helpers
-├── prisma/           # Prisma schema and migrations
-├── public/           # Static assets
-├── middleware.js     # Route middleware
-├── components.json   # UI component configuration
-├── next.config.mjs   # Next.js configuration
-└── package.json
+├── actions/                 # Server Actions
+│   ├── ats.js               #   ATS score and keyword analysis
+│   ├── cover-letter.js      #   Cover letter generation and storage
+│   ├── dashboard.js         #   Industry insights
+│   ├── interview.js         #   Quiz and mock interview logic
+│   ├── resume.js            #   Resume saving and AI improvements
+│   └── user.js              #   User and onboarding data
+├── app/
+│   ├── (auth)/              # Sign-in and sign-up (Clerk)
+│   ├── (main)/
+│   │   ├── ai-cover-letter/ # Generate, list, and preview cover letters
+│   │   ├── ats-checker/     # ATS checker page
+│   │   ├── dashboard/       # Industry insights dashboard
+│   │   ├── interview/       # Quizzes, mock interview, performance stats
+│   │   ├── onboarding/      # First-time profile setup
+│   │   └── resume/          # Resume builder
+│   ├── api/inngest/         # Inngest endpoint
+│   └── lib/                 # Validation schemas and helpers
+├── components/              # Shared components (header, hero, footer)
+│   └── ui/                  #   shadcn/ui components
+├── data/                    # Static content (FAQs, features, industries)
+├── hooks/                   # Custom hooks (use-fetch)
+├── lib/                     # Prisma client, Inngest, user check, utils
+├── prisma/                  # Prisma schema and migrations
+├── public/                  # Static assets
+└── middleware.js            # Route protection
 ```
+
+---
+
+## ⚡ Impact
+
+- ⏱️ Reduces manual effort in tailoring resumes to each job
+- ✅ Improves chances of passing ATS screening
+- 🎓 Delivers personalized career guidance at scale
 
 ---
 
@@ -163,6 +203,8 @@ careerpilot-ai/
 
 - Building and shipping an **AI-powered SaaS** application
 - Integrating **LLM APIs** for real-world use cases
+- Adding **authentication** and protected routes with Clerk
+- Running **background jobs** with Inngest
 - Designing a **scalable full-stack architecture** with Next.js and Prisma
 - Improving UX through **personalization**
 
@@ -183,7 +225,7 @@ It's a complete career growth platform, not just a resume checker.
 ## 🗺 Roadmap
 
 - [ ] Resume export to PDF
-- [ ] Mock interview mode with scoring
+- [ ] Smarter mock interviews with scoring
 - [ ] Job application reminders
 
 ---
